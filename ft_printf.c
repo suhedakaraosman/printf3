@@ -14,6 +14,12 @@
 #include <unistd.h>
 #include <stdarg.h>
 
+static int	ft_is_conversion_specifier(char c)
+{
+	return (c == 'd' || c == 'i' || c == 's' || c == 'c' || c == 'p' || \
+			c == 'x' || c == 'X' || c == 'u');
+}
+
 static int	ft_handle_conversion(va_list args, char fmt)
 {
 	if (fmt == 'd' || fmt == 'i')
@@ -25,16 +31,40 @@ static int	ft_handle_conversion(va_list args, char fmt)
 	else if (fmt == 'p')
 		return (ft_print_ptr(va_arg(args, void *)));
 	else if (fmt == 'x')
-		return (ft_print_hex_lower(va_arg(args, unsigned int)));
+		return (ft_print_hex_lower(va_arg(args, unsigned long)));
 	else if (fmt == 'X')
-		return (ft_print_hex_upper(va_arg(args, unsigned int)));
+		return (ft_print_hex_upper(va_arg(args, unsigned long)));
 	else if (fmt == 'u')
 		return (ft_print_unsigned(va_arg(args, unsigned int)));
-	else if (fmt == '%')
-		return (ft_print_percent());
 	return (0);
 }
-#include <stdio.h>
+
+static int	ft_process_percent(va_list args, const char *format, int *i)
+{
+	int	char_count;
+
+	char_count = 0;
+	(*i)++;
+	if (!format[*i])
+	{
+		char_count += write(1, "%", 1); // hata durumu almak zorunlu ise return(-1); 
+	}
+	else if (format[*i] == '%')
+	{
+		char_count += ft_print_percent();
+	}
+	else if (ft_is_conversion_specifier(format[*i]))
+	{
+		char_count += ft_handle_conversion(args, format[*i]);
+	}
+	else
+	{
+		char_count += write(1, "%", 1);
+		char_count += write(1, &format[*i], 1);
+	}
+	return (char_count);
+}
+
 int	ft_printf(const char *format, ...)
 {
 	va_list	args;
@@ -43,21 +73,27 @@ int	ft_printf(const char *format, ...)
 
 	i = 0;
 	len = 0;
+    if (!(format))
+    {
+        return (-1);
+    }
 	va_start(args, format);
-	while (format[i])
+    while (format[i])
 	{
-		if (format[i] == '%' && format[i + 1])
+		if (format[i] == '%')
 		{
-			i++;
-			len += ft_handle_conversion(args, format[i]);
+			len += ft_process_percent(args, format, &i);
+			if (!format[i])
+				break ;
 		}
 		else
+		{
 			len += write(1, &format[i], 1);
+		}
 		i++;
 	}
 	va_end(args);
 	return (len);
 }
-
 	
 // va_start(args, format); Neden Böyle bir şey var
