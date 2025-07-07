@@ -47,7 +47,7 @@ static int	ft_process_percent(va_list args, const char *format, int *i)
 	(*i)++;
 	if (!format[*i])
 	{
-		char_count += write(1, "%", 1); // hata durumu almak zorunlu ise return(-1); 
+		char_count += write(1, "%", 1);
 	}
 	else if (format[*i] == '%')
 	{
