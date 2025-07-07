@@ -20,7 +20,7 @@ int	ft_print_unsigned(unsigned int nbr)
 
 	if (nbr == 0)
 	{
-		if (write(1, "0", 1) < 0)
+		if (write(1, "0", 1) == -1)
 			return (-1);
 		return (1);
 	}
@@ -33,7 +33,7 @@ int	ft_print_unsigned(unsigned int nbr)
 		len += ret;
 	}
 	c = '0' + (nbr % 10);
-	if (write(1, &c, 1) < 0)
+	if (write(1, &c, 1) == -1)
 		return (-1);
 	return (len + 1);
 }
