@@ -18,8 +18,8 @@
 
 int		ft_printf(const char *format, ...);
 int		ft_print_chr(int c);
-int		ft_print_hex_lower(unsigned long num);
-int		ft_print_hex_upper(unsigned long num);
+int		ft_print_hex_lower(unsigned int num);
+int		ft_print_hex_upper(unsigned int num);
 int		ft_print_nbr(int n);
 int		ft_print_percent(void);
 int		ft_print_ptr(void *ptr);
