@@ -36,7 +36,7 @@ int	ft_print_hex_upper(unsigned long i)
 		hex_char = '0' + (i % 16);
 	else
 		hex_char = 'A' + ((i % 16) - 10);
-	if (write(1, &hex_char, 1) < 0)
+	if (write(1, &hex_char, 1) == -1)
 		return (-1);
 	return (total_len + 1);
 }
