@@ -10,28 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include <unistd.h>
 
 int	ft_print_ptr(void *ptr)
 {
-	int		total_len;
-	int		ret;
+	char			*hex;
+	unsigned long	ret;
+	char			buf[16];
+	int				i;
+	int				res;
 
-	if (ptr == NULL)
+	if (ptr == NULL) 
 	{
-		ret = write(1, "(nil)", 5);
-		if (ret == -1)
+		if (write(1, "(nil)", 5) < 0)
 			return (-1);
-		return (ret);
+		return (5);
 	}
-	ret = write(1, "0x", 2);
-	if (ret == -1)
+	ret = (unsigned long)ptr;
+	hex = "0123456789abcdef";
+	if (write(1, "0x", 2) < 0)
 		return (-1);
-	total_len = ret;
-	ret = ft_print_hex_lower((unsigned long)ptr);
-	if (ret == -1)
-		return (-1);
-	total_len += ret;
-	return (total_len);
+	res = 2;
+	i = 0;
+	while (ret > 0)
+	{
+		buf[i++] = hex[ret % 16];
+		ret /= 16;
+	}
+	while (i-- > 0)
+	{
+		if (write(1, &buf[i], 1) < 0)
+			return (-1);
+		res++;
+	}
+	return (res);
 }
