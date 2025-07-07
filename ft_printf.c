@@ -31,9 +31,9 @@ static int	ft_handle_conversion(va_list args, char fmt)
 	else if (fmt == 'p')
 		return (ft_print_ptr(va_arg(args, void *)));
 	else if (fmt == 'x')
-		return (ft_print_hex_lower(va_arg(args, unsigned long)));
+		return (ft_print_hex_lower(va_arg(args, unsigned int)));
 	else if (fmt == 'X')
-		return (ft_print_hex_upper(va_arg(args, unsigned long)));
+		return (ft_print_hex_upper(va_arg(args, unsigned int)));
 	else if (fmt == 'u')
 		return (ft_print_unsigned(va_arg(args, unsigned int)));
 	return (0);
