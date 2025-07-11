@@ -12,36 +12,42 @@
 
 #include <unistd.h>
 
-int	ft_print_ptr(void *ptr)
+static int	ft_put_hex_ptr(unsigned long n)
 {
-	char			*hex;
-	unsigned long	ret;
-	char			buf[16];
-	int				i;
-	int				res;
+	char	buf[17];
+	char	*hex;
+	int		i;
+	int		res;
 
-	if (ptr == NULL) 
-	{
-		if (write(1, "(nil)", 5) == -1)
-			return (-1);
-		return (5);
-	}
-	ret = (unsigned long)ptr;
 	hex = "0123456789abcdef";
-	if (write(1, "0x", 2) == -1)
-		return (-1);
-	res = 2;
 	i = 0;
-	while (ret > 0)
+	while (n > 0)
 	{
-		buf[i++] = hex[ret % 16];
-		ret /= 16;
+		buf[i++] = hex[n % 16];
+		n /= 16;
 	}
-	while (i-- > 0)
+	res = 0;
+	while (i--)
 	{
 		if (write(1, &buf[i], 1) == -1)
 			return (-1);
 		res++;
 	}
 	return (res);
+}
+
+int	ft_print_ptr(void *ptr)
+{
+	int	res;
+	int	tmp;
+
+	if (!ptr)
+		return (write(1, "(nil)", 5));
+	if (write(1, "0x", 2) == -1)
+		return (-1);
+	res = 2;
+	tmp = ft_put_hex_ptr((unsigned long)ptr);
+	if (tmp == -1)
+		return (-1);
+	return (res + tmp);
 }
